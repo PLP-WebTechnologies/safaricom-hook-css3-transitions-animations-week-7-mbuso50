@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        /* Button with transition */
+        .hover-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .hover-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Animated spinner */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #007bff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Modal styles */
+        #modal {
+            display: none; /* Hidden by default */
+            position: fixed; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.5); 
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        #modalContent {
+            background-color: white; 
+            padding: 20px; 
+            border-radius: 5px; 
+        }
+
+        /* Form styles */
+        form {
+            margin-top: 20px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Interactive Webpage</h1>
+
+    <!-- Button to show modal -->
+    <button class="hover-button" id="openModalBtn">Open Modal</button>
+
+    <!-- Spinner -->
+    <div class="spinner" id="spinner"></div>
+
+    <!-- Modal -->
+    <div id="modal">
+        <div id="modalContent">
+            <span id="closeModalBtn" style="cursor:pointer;">&times; Close</span>
+            <p>This is a modal!</p>
+        </div>
+    </div>
+
+    <!-- Form with Validation -->
+    <form id="userForm">
+        <label for="name">Name (min 3 characters):</label><br>
+        <input type="text" id="name" required minlength="3"><br>
+        <span class="error" id="nameError"></span><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" required><br>
+        <span class="error" id="emailError"></span><br>
+
+        <label for="password">Password (min 8 characters, at least one uppercase letter and one number):</label><br>
+        <input type="password" id="password" required minlength="8"><br>
+        <span class="error" id="passwordError"></span><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Function to calculate area of rectangle
+        function calculateArea(length, width) {
+            return length * width;
+        }
+
+        // Function demonstrating scope
+        let globalVar = "I'm a global variable";
+
+        function demonstrateScope() {
+            let localVar = "I'm a local variable";
+            console.log(globalVar); // Accessible
+            console.log(localVar); // Accessible
+        }
+
+        demonstrateScope();
+        
+        // Toggle modal visibility
+        const openModalBtn = document.getElementById('openModalBtn');
+        const modal = document.getElementById('modal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        openModalBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            
+            // Start spinner animation
+            document.getElementById('spinner').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('spinner').style.display = 'none'; // Hide spinner after loading
+                modal.style.display = 'flex'; // Show modal
+            }, 2000); // Simulate loading time
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Form validation
+        const userForm = document.getElementById('userForm');
+
+        userForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent form submission
+
+            // Clear previous error messages
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+
+            let valid = true;
+
+            // Name validation
+            const nameInput = document.getElementById('name');
+            if (nameInput.value.length < 3) {
+                document.getElementById('nameError').textContent = 'Name must be at least 3 characters long.';
+                valid = false;
+            }
+
+            // Email validation
+            const emailInput = document.getElementById('email');
+            if (!emailInput.validity.valid) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email.';
+                valid = false;
+            }
+
+            // Password validation
+            const passwordInput = document.getElementById('password');
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/; // At least one uppercase letter and one number
+           
+           if (!passwordRegex.test(passwordInput.value)) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long with at least one uppercase letter and one number.';
+                valid = false;
+           }
+
+           if (valid) {
+               alert('Form submitted successfully!');
+               userForm.reset();
+               modal.style.display = 'none'; // Optionally hide modal on successful submission
+           }
+       });
+   </script>
+
+</body>
+</html>
